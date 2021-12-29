@@ -1,10 +1,10 @@
-import { Fragment } from 'react';
-import { useSelector } from 'react-redux';
+import { Fragment, PropsWithChildren, ReactNode } from 'react';
+import { useAppSelector } from '../../store';
 import Notification from '../UI/Notification';
 import MainHeader from './MainHeader';
 
-const Layout = (props) => {
-	const notification = useSelector((state) => state.ui.notification);
+const Layout = (props: PropsWithChildren<ReactNode>) => {
+	const notification = useAppSelector((state) => state.ui.notification);
 	return (
 		<Fragment>
 			<Notification {...notification} />

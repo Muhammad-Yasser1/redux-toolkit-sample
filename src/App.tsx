@@ -1,24 +1,25 @@
 import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 
 import Cart from './components/Cart/Cart';
 import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
+import { useAppDispatch, useAppSelector } from './store';
 import {
 	initCart,
 	updateCartOnServer,
 } from './store/features/cart/cart-actions';
 
-function App() {
-	const showCart = useSelector((state) => state.ui.cartIsVisible);
-	const dispatch = useDispatch();
-	const cart = useSelector((state) => state.cart);
+export function App() {
+	const showCart = useAppSelector((state) => state.ui.cartIsVisible);
+	const cart = useAppSelector((state) => state.cart);
+	const dispatch = useAppDispatch();
 	const isCartInitiated = useRef(false);
 	const cartChanged = useRef(false);
+
 	useEffect(() => {
 		if (isCartInitiated.current && !cartChanged.current) {
-			return (cartChanged.current = true); // to skip the first cart update because it will happen due to initCart
+			cartChanged.current = true; // to skip the first cart update because it will happen due to initCart
+			return;
 		}
 		if (isCartInitiated.current && cartChanged.current) {
 			dispatch(updateCartOnServer(cart));
@@ -28,6 +29,7 @@ function App() {
 	useEffect(() => {
 		dispatch(initCart(isCartInitiated));
 	}, [dispatch]);
+
 	return (
 		<Layout>
 			{showCart && <Cart />}
@@ -35,5 +37,3 @@ function App() {
 		</Layout>
 	);
 }
-
-export default App;
